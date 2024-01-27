@@ -1,8 +1,8 @@
 // INSTANCIAS:
 const express = require("express");
+const { getArticleById, getAllArticles, getAllCategories } = require("./database/requests");
 const cors = require("cors");
 const axios = require("axios");
-const mysql = require("mysql2/promise");
 const ejs = require("ejs");
 const path = require("path");
 
@@ -12,47 +12,41 @@ const app = express();
 // MIDDLEWARE:
 app.use(cors()); // Habilitar CORS para todas las rutas
 app.use(express.static(path.join(__dirname, "public"))); // Hacer que el directorio 'public' sea el directorio estático
+app.use(async (req, res, next) => {
+    // Extraer datos de API para cada ruta
+    try {
+        const externalApiResponse = await axios.get("https://www.timeapi.io/api/Time/current/zone?timeZone=Europe/London");
+
+        // Se modifica "externalData" a la petición para hacerla accesible en rutas:
+        req.externalData = externalApiResponse.data;
+
+        next();
+    }
+    catch (error) {
+        console.error("Error fetching external data:", error.message);
+        next(error);
+    }
+});
 
 
 // CONFIGURACIÓN:
 app.set("view engine", "ejs"); // Usar EJS (Embedded JavaScript) como motor de plantillas
-const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-};
 
-
-/*
-* Conecta a la base de datos
-*/
-async function connectToDatabase() {
-    try {
-        const connection = await mysql.createConnection(dbConfig);
-        console.log("Connected to the database. Running request...");
-        return connection;
-    }
-    catch (error) {
-        console.error("Error connecting to the database:", error);
-        throw error;
-    }
-}
 
 
 // RUTAS:
+// TODO - Seguir trabajando en reflejar los datos desde la base de datos
 app.get("/", async (req, res) => {
     try {
-        // Ejemplo de solicitud a una API externa
-        const externalApiResponse = await axios.get("https://www.timeapi.io/api/Time/current/zone?timeZone=Europe/London");
-        const externalData = externalApiResponse.data;
+        // Acceso a "externalData" desde la petición
+        const externalData = req.externalData;
 
         // Ejemplo de consulta a la base de datos MySQL
-        // const dbConnection = await connectToDatabase();
-        // const [dbResults] = await dbConnection.execute("");
+        const articles = await getAllArticles();
+        const categories = await getAllCategories();
 
         // Devolver 'index' como vista con datos
-        res.render("index", { externalData });
+        res.render("index", { externalData, articles, categories });
     }
     catch (error) {
         console.error("Error in the main route:", error);
@@ -60,9 +54,12 @@ app.get("/", async (req, res) => {
     }
 });
 
+
 app.get("/category", async (req, res) => {
    try {
-        res.render("category");
+       const externalData = req.externalData;
+
+       res.render("category", { externalData });
    }
    catch (error) {
        console.error("Error in the category route:", error);
@@ -70,12 +67,31 @@ app.get("/category", async (req, res) => {
    }
 });
 
+
 app.get("/single", async (req, res) => {
     try {
-        res.render("single");
+        const externalData = req.externalData;
+
+        res.render("single", { externalData });
     }
     catch (error) {
-        console.error("Error in the category route:", error);
+        console.error("Error in the single route:", error);
+        res.status(500).send("Internal server error");
+    }
+});
+
+app.get("/single/:id", async (req, res) => {
+    try {
+        const externalData = req.externalData;
+
+        const articleId = req.params.id;
+        const article = await getArticleById(articleId);
+
+        // res.json(article);
+        res.render("single", { externalData, article });
+    }
+    catch (error) {
+        console.error("Error in the single route:", error);
         res.status(500).send("Internal server error");
     }
 });
