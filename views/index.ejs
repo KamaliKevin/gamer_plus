@@ -9,25 +9,25 @@
 						<div id="featured-news-carousal" class="carousel slide" data-ride="carousel">
 							<!-- Wrapper for slides -->
 							<div class="carousel-inner" role="listbox">
-								<% if(articles && articles.length > 0) { %>
-									<% for(let i = 0; i < 2; i++) { %>
-										<div class="item <%= i === 0 ? 'active' : '' %> feature_news_item">
+								<% if(carouselArticles && carouselArticles.length > 0) { %>
+									<% carouselArticles.forEach((article, index) => { %>
+										<div class="item <%= index === 0 ? 'active' : '' %> feature_news_item">
 											<div class="item_wrapper">
 												<div class="item_img">
-													<img class="img-responsive" src="<%= articles[i].image_src %>" alt="Noticia carrusel">
+													<img class="img-responsive" src="<%= article.image_src %>" alt="Noticia carrusel">
 												</div> <!--item_img-->
 												<div class="item_title_date">
 													<div class="news_item_title">
-														<h2><a href="#"><%= articles[i].title %></a></h2>
+														<h2><a href="#"><%= article.title %></a></h2>
 													</div>
-													<div class="item_meta"><%= articles[i].formatted_created_at %></div>
+													<div class="item_meta"><%= article.formatted_created_at %></div>
 												</div> <!--item_title_date-->
 											</div> <!--item_wrapper-->
 
-											<div class="item_content"><%= articles[i].subtitle %></div>
+											<div class="item_content"><%= article.subtitle %></div>
 
 										</div><!--feature_news_item-->
-									<% } %>
+									<% }); %>
 								<% } else { %>
 									<p>No carousel article data</p>
 								<% } %>
@@ -50,30 +50,30 @@
 				<div class="col-md-6">
 					<div class="feature_news_static">
 						<div class="row">
-							<% if(articles && articles.length > 0) { %>
-								<% for(let i = 2; i < 4; i++) { %>
+							<% if(esportsFeatureArticles && esportsFeatureArticles.length > 0) { %>
+								<% esportsFeatureArticles.forEach(article => { %>
 									<div class="col-md-6">
 										<div class="feature_news_item">
 											<div class="item active">
 												<div class="item_wrapper">
 													<div class="item_img">
-														<img class="img-responsive" src="<%= articles[i].image_src %>" alt="Chania">
+														<img class="img-responsive" src="<%= article.image_src %>" alt="Chania">
 													</div> <!--item_img-->
 													<div class="item_title_date">
 														<div class="news_item_title">
-															<h2><a href="/single"><%= articles[i].title %></a></h2>
+															<h2><a href="/single"><%= article.title %></a></h2>
 														</div>
-														<div class="item_meta"><%= articles[i].formatted_created_at %></div>
+														<div class="item_meta"><%= article.formatted_created_at %></div>
 													</div><!--item_title_date-->
 												</div> <!--item_wrapper-->
-												<div class="item_content"><%= articles[i].subtitle %></div>
+												<div class="item_content"><%= article.subtitle %></div>
 
 											</div><!--item-->
 										</div><!--feature_news_item-->
 									</div>
-								<% } %>
+								<% }); %>
 							<% } else { %>
-								<p>No feature article data</p>
+								<p>No esports feature article data</p>
 							<% } %>
 						</div><!--row-->
 					</div><!--feature_news_static-->
@@ -88,43 +88,43 @@
 		<div class="row">
 		   	<div class="col-md-9">
 		   		<div class="category_layout">
-			   		<div class="item_category red"><h2><a href="/category"><%= articles[4].category_name %></a></h2></div>
+			   		<div class="item_category blue"><h2><a href="/category"><%= playstationFeatureArticle.category_name %></a></h2></div>
 						<div class="row">
 				   			<div class="col-md-7">
 								<div class="item feature_news_item">
 									<div class="item_wrapper">
 										<div class="item_img">
-											<img class="img-responsive" src="<%= articles[4].image_src %>" alt="Chania">
+											<img class="img-responsive" src="<%= playstationFeatureArticle.image_src %>" alt="Chania">
 										</div><!--item_img--> 
 										<div class="item_title_date">
 											<div class="news_item_title">
-												<h2><a href="#"><%= articles[4].title %></a></h2>
+												<h2><a href="#"><%= playstationFeatureArticle.title %></a></h2>
 											</div><!--news_item_title-->
-                                            <div class="item_meta"><%= articles[4].formatted_created_at %></div>
+                                            <div class="item_meta"><%= playstationFeatureArticle.formatted_created_at %></div>
 										</div><!--item_title_date-->
 									</div><!--item_wrapper-->	
-								    <div class="item_content"><%= articles[4].subtitle %></div><!--item_content-->
+								    <div class="item_content"><%= playstationFeatureArticle.subtitle %></div><!--item_content-->
 
 								</div><!--feature_news_item-->
 				   			</div><!--col-md-7-->
 				   			
 				   			<div class="col-md-5">
 								<div class="media_wrapper">
-									<% if(articles && articles.length > 0) { %>
-										<% for(let i = 5; i < 7; i++) { %>
+									<% if(playstationListArticles && playstationListArticles.length > 0) { %>
+										<% playstationListArticles.forEach(article => { %>
 											<div class="media">
 												<div class="media-left">
-													<a href="#"><img class="media-object" src="<%= articles[i].image_src %>" alt="Generic placeholder image"></a>
+													<a href="#"><img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image"></a>
 												</div><!--media-left-->
 												<div class="media-body">
-													<h3 class="media-heading"><a href="#"><%= articles[i].title %></a></h3>
+													<h3 class="media-heading"><a href="#"><%= article.title %></a></h3>
 
-													<p><%= articles[i].subtitle %></p>
+													<p><%= article.subtitle %></p>
 
 												</div><!--media-body-->
 											</div><!--media-->
 
-										<% } %>
+										<% }); %>
 									<% } else { %>
 										<p>No category article data</p>
 									<% } %>
@@ -135,43 +135,43 @@
 				</div><!--category_layout-->
 
 		   		<div class="category_layout">
-		   			<div class="item_category blue"><h2><a href="#"><%= articles[7].category_name %></a></h2></div>
+		   			<div class="item_category red"><h2><a href="#"><%= nintendoFeatureArticle.category_name %></a></h2></div>
 					<div class="row">
 						<div class="col-md-7">
 							<div class="item feature_news_item">
 								<div class="item_wrapper">
 									<div class="item_img">
-										<img class="img-responsive" src="<%= articles[7].image_src %>" alt="Chania">
+										<img class="img-responsive" src="<%= nintendoFeatureArticle.image_src %>" alt="Chania">
 									</div><!--item_img-->
 									<div class="item_title_date">
 										<div class="news_item_title">
-											<h2><a href="#"><%= articles[7].title %></a></h2>
+											<h2><a href="#"><%= nintendoFeatureArticle.title %></a></h2>
 										</div><!--news_item_title-->
-										<div class="item_meta"><%= articles[7].formatted_created_at %></div>
+										<div class="item_meta"><%= nintendoFeatureArticle.formatted_created_at %></div>
 									</div><!--item_title_date-->
 								</div><!--item_wrapper-->
-								<div class="item_content"><%= articles[7].subtitle %></div><!--item_content-->
+								<div class="item_content"><%= nintendoFeatureArticle.subtitle %></div><!--item_content-->
 
 							</div><!--feature_news_item-->
 						</div><!--col-md-7-->
 			   			
 			   			<div class="col-md-5">
 							<div class="media_wrapper">
-								<% if(articles && articles.length > 0) { %>
-									<% for(let i = 8; i < 10; i++) { %>
+								<% if(nintendoListArticles && nintendoListArticles.length > 0) { %>
+									<% nintendoListArticles.forEach(article => { %>
 										<div class="media">
 											<div class="media-left">
-												<a href="#"><img class="media-object" src="<%= articles[i].image_src %>" alt="Generic placeholder image"></a>
+												<a href="#"><img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image"></a>
 											</div><!--media-left-->
 											<div class="media-body">
-												<h3 class="media-heading"><a href="#"><%= articles[i].title %></a></h3>
+												<h3 class="media-heading"><a href="#"><%= article.title %></a></h3>
 
-												<p><%= articles[i].subtitle %></p>
+												<p><%= article.subtitle %></p>
 
 											</div><!--media-body-->
 										</div><!--media-->
 
-									<% } %>
+									<% }); %>
 								<% } else { %>
 									<p>No category article data</p>
 								<% } %>
@@ -186,31 +186,22 @@
 
 				<div class="tab sitebar">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#1" data-toggle="tab">Latest</a></li>
+						<li class="active"><a href="#1" data-toggle="tab">Nuevo</a></li>
 						<li><a href="#2" data-toggle="tab">Popular</a></li>
 					</ul>
 
 					<div class="tab-content">
 						<div class="tab-pane active" id="1">
-							<% articles.forEach(article => { %>
-								<% if(article.image_src.includes("list")) { %>
-								<!-- TODO - Convertir las imagenes a 80x80 de los articulos recientes para que quepen en el aside -->
-									<div class="media">
-										<div class="media-left">
-											<a href="#"><img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image"></a>
-										</div><!--media-left-->
-										<div class="media-body">
-											<h4 class="media-heading"><a href="#"><%= article.title %></a></h4>
-											<span class="rating">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-half-full"></i>
-									</span>
-										</div><!--media-body-->
-									</div><!--media-->
-								<% } %>
+							<% latestArticles.forEach(article => { %>
+								<div class="media">
+									<div class="media-left">
+										<a href="#"><img class="media-object" src="<%= article.image_src + '?width=80&height=80' %>" alt="Generic placeholder image"></a>
+									</div><!--media-left-->
+									<div class="media-body">
+										<h4 class="media-heading"><a href="#"><%= article.title %></a></h4>
+										<div class="item_meta"><%= article.formatted_created_at %></div>
+									</div><!--media-body-->
+								</div><!--media-->
 							<% }); %>
 						</div><!--tab-pane-->
 
@@ -250,16 +241,15 @@
 					</div><!--tab-content-->
 				</div><!--tab-->
 
-				<div class="ad">
-					<img class="img-responsive" src="/img/img-sitebar.jpg" alt="img" />
-					<img class="img-responsive" src="/img/img-sitebar.jpg" alt="img" />
-					<img class="img-responsive" src="/img/img-sitebar.jpg" alt="img" />
-					<img class="img-responsive" src="/img/img-sitebar.jpg" alt="img" />
-				</div><!--ad-->
-
-				<div class="ad">
-					<img class="img-responsive" src="/img/img-ad2.jpg" alt="img" />
-				</div>
+				<% if(asideAds && asideAds.length > 0) { %>
+					<% asideAds.forEach(ad => { %>
+						<div class="ad">
+							<a href="#" target="_blank"><img class="img-responsive" src="<%= ad.image_src %>" alt="img" /></a>
+						</div>
+					<% }); %>
+				<% } else { %>
+					<p>No ad data</p>
+				<% } %>
 			</div>
 		</div>
 	</div>
@@ -271,51 +261,22 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="feature_video_wrapper">
-					<div class="feature_video_title"><h2>Featured Videos</h2></div>
+					<div class="feature_video_title"><h2>Videos</h2></div>
 
 					<div id="feature_video_slider" class="owl-carousel">
-						<div class="item">
-							<div class="video_thumb"><img src="/img/video.jpg" alt="Owl Image"></div>
-							<div class="video_info">
-								<div class="video_item_title"><h3><a href="#">Track & Fiels famous still in the craze of Runner world</a></h3></div><!--video_item_title-->
-								<div class="item_meta"><a href="#">20Aug- 2015</a></div><!--item_meta-->
-							</div><!--video_info-->
-						</div>
-						<div class="item">
-							<div class="video_thumb"><img src="/img/video2.jpg" alt="Owl Image"></div>
-							<div class="video_info">
-								<div class="video_item_title"><h3><a href="#">Track & Fiels famous still in the craze of Runner world</a></h3></div><!--video_item_title-->
-								<div class="item_meta"><a href="#">20Aug- 2015</a></div><!--item_meta-->
-							</div><!--video_info-->
-						</div>
-						<div class="item">
-							<div class="video_thumb"><img src="/img/video3.jpg" alt="Owl Image"></div>
-							<div class="video_info">
-								<div class="video_item_title"><h3><a href="#">Track & Fiels famous still in the craze of Runner world</a></h3></div><!--video_item_title-->
-								<div class="item_meta"><a href="#">20Aug- 2015</a></div><!--item_meta-->
-							</div><!--video_info-->
-						</div>
-						<div class="item">
-							<div class="video_thumb"><img src="/img/video2.jpg" alt="Owl Image"></div>
-							<div class="video_info">
-								<div class="video_item_title"><h3><a href="#">Track & Fiels famous still in the craze of Runner world</a></h3></div><!--video_item_title-->
-								<div class="item_meta"><a href="#">20Aug- 2015</a></div><!--item_meta-->
-							</div><!--video_info-->
-						</div>
-						<div class="item">
-							<div class="video_thumb"><img src="/img/video.jpg" alt="Owl Image"></div>
-							<div class="video_info">
-								<div class="video_item_title"><h3><a href="#">Track & Fiels famous still in the craze of Runner world</a></h3></div><!--video_item_title-->
-								<div class="item_meta"><a href="#">20Aug- 2015</a></div><!--item_meta-->
-							</div><!--video_info-->
-						</div>
-						<div class="item">
-							<div class="video_thumb"><img src="/img/video3.jpg" alt="Owl Image"></div>
-							<div class="video_info">
-								<div class="video_item_title"><h3><a href="#">Track & Fiels famous still in the craze of Runner world</a></h3></div><!--video_item_title-->
-								<div class="item_meta"><a href="#">20Aug- 2015</a></div><!--item_meta-->
-							</div><!--video_info-->
-						</div>
+						<% if(videoPreviews && videoPreviews.length > 0) { %>
+							<% videoPreviews.forEach(preview => { %>
+								<div class="item">
+									<div class="video_thumb"><img src="<%= preview.image_src %>" alt="Owl Image"></div>
+									<div class="video_info">
+										<div class="video_item_title"><h3><a href="#"><%= preview.title %></a></h3></div><!--video_item_title-->
+										<div class="item_meta"><%= preview.formatted_created_at  %></div><!--item_meta-->
+									</div><!--video_info-->
+								</div>
+							<% }); %>
+						<% } else { %>
+							<p>No video thumbnail data</p>
+						<% } %>
 		            </div><!--feature_video_slider-->
 
 
