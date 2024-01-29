@@ -5,52 +5,40 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="text_widget footer_widget">
-                        <div class="footer_widget_title"><h2>About Sports Mag</h2></div>
+                        <div class="footer_widget_title"><h2>Sobre Gamer Plus</h2></div>
 
-                        <div class="footer_widget_content">Collaborativelyadministrate empowered marketsplug-and-play networks. Dynamic procrastinate after.marketsplug-and-play networks. Dynamic procrastinate users after. Dynamic procrastinateafter. marketsplug-and-play networks. Dynamic procrastinate users after...
+                        <div class="footer_widget_content">
+                            Gamer Plus es un portal de noticias de videojuegos con unos pocos
+                            años en el mundo del periodismo de videojuegos. Este portal considera
+                            que es importante contar las historias de manera completa y honesta, pero que a la vez
+                            haya un mínimo de consideración por el/la lector/a. "Ser considerados no cuesta nada",
+                            una idea muy apoyada en esta empresa y se defiende por sobretodo.
                         </div>
                     </div><!--text_widget-->
                 </div><!--col-xs-3-->
 
                 <div class="col-md-6">
                     <div class="footer_widget">
-                        <div class="footer_widget_title"><h2>Discover</h2></div>
+                        <div class="footer_widget_title"><h2>Descubre</h2></div>
                         <div class="footer_menu_item ">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <ul class="nav navbar-nav ">
-                                        <li><a href="../navbar/">Baseball</a></li>
-                                        <li><a href="../navbar-static-top/">Football</a></li>
-                                        <li><a href="../resources">Cricket</a></li>
-                                        <li><a href="../navbar/">Rugbi</a></li>
-                                        <li><a href="../navbar/">Hockey</a></li>
-                                        <li><a href="../navbar-static-top/">Boxing</a></li>
-                                        <li><a href="../resources">Golf</a></li>
-                                        <li><a href="../navbar/">Tennis</a></li>
-                                        <li><a href="../navbar/">Horse Racing</a></li>
-                                    </ul>
-                                </div><!--col-sm-4-->
-                                <div class="col-sm-4 ">
-                                    <ul class="nav navbar-nav  ">
-                                        <li><a href="../navbar/">Track & Field</a></li>
-                                        <li><a href="../navbar-static-top/">MembershipContact us</a></li>
-                                        <li><a href="../resources">Newsletter Alerts</a></li>
-                                        <li><a href="../navbar/">Podcast</a></li>
-                                        <li><a href="../navbar/">Blog</a></li>
-                                        <li><a href="../navbar-static-top/">SMS Subscription</a></li>
-                                        <li><a href="../resources">Advertisement Policy</a></li>
-                                        <li><a href="../navbar/">Jobs</a></li>
+                                    <ul class="nav navbar-nav">
+                                        <% if(categories && categories.length > 0) { %>
+                                            <% categories.forEach(category => { %>
+                                                <li><a href="/category/<%= category.name.toLowerCase() %>"><%= category.name %></a></li>
+                                            <% });%>
+                                        <% } else { %>
+                                            <li>No discover data</li>
+                                        <% } %>
                                     </ul>
                                 </div><!--col-sm-4-->
                                 <div class="col-sm-4">
                                     <ul class="nav navbar-nav ">
-                                        <li><a href="../navbar/">Report technical issue</a></li>
-                                        <li><a href="../navbar-static-top/">Complaints & Corrections</a></li>
-                                        <li><a href="../resources">Terms & Conditions</a></li>
-                                        <li><a href="../navbar-static-top/">Privacy Policy</a></li>
-                                        <li><a href="../resources">Cookie Policy</a></li>
-                                        <li><a href="../navbar/">Securedrop</a></li>
-                                        <li><a href="../navbar/">Archives</a></li>
+                                        <li><a href="#">Contacto</a></li>
+                                        <li><a href="#">Términos y condiciones</a></li>
+                                        <li><a href="#">Política de privacidad</a></li>
+                                        <li><a href="#">Política de cookies</a></li>
                                     </ul>
                                 </div><!--col-sm-4-->
                             </div><!--row-->
@@ -59,11 +47,20 @@
                 </div><!--col-xs-6-->
 
                 <div class="col-md-3">
-                    <div class="text_widget footer_widget">
-                        <div class="footer_widget_title"><h2>Editor’s Message</h2></div>
-                        <img src="/images/img-author.jpg" />
-                        <div class="footer_widget_content">Collaborativelyadministrate empowered marketsplug-and-play networks. Dynamic procrastinate after.marketsplug-and-play networks. Dynamic procrastinate users after. Dynamic procrastinateafter. marketsplug-and-play networks. Dynamic procrastinate users after...</div>
-                    </div>
+                    <% if(editor) { %>
+                        <div class="text_widget footer_widget">
+                            <div class="footer_widget_title"><h2>Mensaje del editor</h2></div>
+                            <img src="<%= editor.image_src %>" />
+                            <div class="footer_widget_content">
+                                Gracias por visitar Gamer Plus. Este portal de noticias de videojuegos
+                                fue creado como una iniciativa para poder informar de la manera más natural
+                                y honesta posible a los jugadores y fanáticos de Esports. ¡Tu visita nos ayuda
+                                a ser más conocidos!
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <p>No editor data</p>
+                    <% } %>
                 </div><!--col-xs-3-->
             </div><!--row-->
         </div><!--container-->
@@ -74,15 +71,21 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                    Editor: Joshep guinter Grunt
+                    <% if(editor) { %>
+                        Editor: <%= editor.first_name + " " + editor.last_name %>
+                    <% } else { %>
+                        No editor data
+                    <% } %>
                 </div><!--col-xs-3-->
                 <div class="col-md-6">
                     <div class="copyright">
-                        © Copyright 2015 - Sports News Mag.com. Design by: <a href="https://uiCookies.com" title="uiCookies">uiCookies</a>
+                        © Copyright 2023 - Gamer Plus<br>
+                        Diseño original hecho por: <a href="https://uiCookies.com" title="uiCookies" target="_blank">uiCookies</a><br>
+                        Diseño modificado por: <a href="https://github.com/KamaliKevin" target="_blank">KamaliKevin</a>
                     </div>
                 </div><!--col-xs-6-->
                 <div class="col-md-3">
-                    Sports News Magazine
+                    Gamer Plus
                 </div><!--col-xs-3-->
             </div><!--row-->
         </div><!--container-->

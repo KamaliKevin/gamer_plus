@@ -1,16 +1,20 @@
 // INSTANCIAS:
 const express = require("express");
 const { getLogo, getHeaderAd, getArticleById, getAllArticles, getAllCategories,
-    getAllCarouselArticles, getAllEsportsFeatureArticles,
-    getPlaystationFeatureArticle, getAllPlaystationListArticles,
-    getNintendoFeatureArticle, getAllNintendoListArticles,
-    getAllLatestArticles, getAllAsideAds, getAllVideoPreviews } = require("./database/requests");
+    getCarouselArticles, getEsportsFeatureArticles,
+    getPlaystationFeatureArticle, getPlaystationListArticles,
+    getNintendoFeatureArticle, getNintendoListArticles,
+    getLatestArticles, getAsideAds, getSingleAd, getVideoPreviews,
+    getEditor, getAuthorByArticleId, getFeatureArticleByCategory,
+    getArticlesByCategory } = require("./database/requests");
 
 const cors = require("cors");
 const axios = require("axios");
 const ejs = require("ejs");
 const path = require("path");
-const sharp = require('sharp');
+const sharp = require("sharp");
+require("./utils/functions");
+
 
 const app = express();
 
@@ -51,22 +55,23 @@ app.get("/", async (req, res) => {
         const logo = await getLogo();
         const headerAd = await getHeaderAd();
         const articles = await getAllArticles();
-        const carouselArticles = await getAllCarouselArticles();
-        const esportsFeatureArticles = await getAllEsportsFeatureArticles();
+        const carouselArticles = await getCarouselArticles();
+        const esportsFeatureArticles = await getEsportsFeatureArticles();
         const playstationFeatureArticle = await getPlaystationFeatureArticle();
-        const playstationListArticles = await getAllPlaystationListArticles();
+        const playstationListArticles = await getPlaystationListArticles();
         const nintendoFeatureArticle = await getNintendoFeatureArticle();
-        const nintendoListArticles = await getAllNintendoListArticles();
-        const latestArticles = await getAllLatestArticles();
+        const nintendoListArticles = await getNintendoListArticles();
+        const latestArticles = await getLatestArticles();
         const categories = await getAllCategories();
-        const asideAds = await getAllAsideAds();
-        const videoPreviews = await getAllVideoPreviews();
+        const asideAds = await getAsideAds();
+        const videoPreviews = await getVideoPreviews();
+        const editor = await getEditor();
 
         // Devolver 'index' como vista con datos
         res.render("index", { externalData, logo, headerAd, articles, carouselArticles,
             esportsFeatureArticles, playstationFeatureArticle, playstationListArticles,
             nintendoFeatureArticle, nintendoListArticles, latestArticles,
-            asideAds, videoPreviews, categories });
+            asideAds, videoPreviews, categories, editor });
     }
     catch (error) {
         console.error("Error in the main route:", error);
@@ -75,11 +80,23 @@ app.get("/", async (req, res) => {
 });
 
 
-app.get("/category", async (req, res) => {
+app.get("/category/:categoryName", async (req, res) => {
    try {
+       const categoryRef = req.params.categoryName.capitalize();
        const externalData = req.externalData;
 
-       res.render("category", { externalData });
+       const logo = await getLogo();
+       const headerAd = await getHeaderAd();
+       const featureArticleByCategory = await getFeatureArticleByCategory(categoryRef);
+       const articlesByCategory = await getArticlesByCategory(categoryRef);
+       const latestArticles = await getLatestArticles();
+       const categories = await getAllCategories();
+       const asideAds = await getAsideAds();
+       const editor = await getEditor();
+
+       res.render("category", { externalData, logo, headerAd,
+           featureArticleByCategory, articlesByCategory,
+           latestArticles, categories, asideAds, editor });
    }
    catch (error) {
        console.error("Error in the category route:", error);
@@ -88,11 +105,24 @@ app.get("/category", async (req, res) => {
 });
 
 
-app.get("/single", async (req, res) => {
+app.get("/single/:articleId", async (req, res) => {
     try {
+        const categoryRef = parseInt(req.params.articleId);
         const externalData = req.externalData;
 
-        res.render("single", { externalData });
+        const logo = await getLogo();
+        const headerAd = await getHeaderAd();
+        const articleById = await getArticleById(categoryRef);
+        const latestArticles = await getLatestArticles();
+        const categories = await getAllCategories();
+        const asideAds = await getAsideAds();
+        const singleAd = await getSingleAd();
+        const editor = await getEditor();
+        const authorByArticleId = await getAuthorByArticleId(categoryRef);
+
+        res.render("single", { externalData, logo, headerAd,
+            articleById, singleAd, latestArticles,
+            categories, asideAds, editor, authorByArticleId });
     }
     catch (error) {
         console.error("Error in the single route:", error);
@@ -100,30 +130,13 @@ app.get("/single", async (req, res) => {
     }
 });
 
-/*
-app.get("/single/:id", async (req, res) => {
-    try {
-        const externalData = req.externalData;
-
-        const articleId = req.params.id;
-        const article = await getArticleById(articleId);
-
-        // res.json(article);
-        res.render("single", { externalData, article });
-    }
-    catch (error) {
-        console.error("Error in the single route:", error);
-        res.status(500).send("Internal server error");
-    }
-});
-*/
 
 app.get("/images/:imageName", async (req, res) => {
     try {
         const imageRef = req.params.imageName;
         const { width, height } = req.query;
 
-        const imagePath = path.join(__dirname, '/public/img/', imageRef);
+        const imagePath = path.join(__dirname, "/public/img/", imageRef);
 
         // Cargar la imagen:
         let image = sharp(imagePath);
@@ -135,7 +148,7 @@ app.get("/images/:imageName", async (req, res) => {
         else if(imageRef.includes("logo")){
             image = image.resize(236, 90);
         }
-        else if(imageRef.includes("header_ad")){
+        else if(imageRef.includes("header_ad") || imageRef.includes("single-ad")){
             image = image.resize(565, 75);
         }
         else if (imageRef.includes("carousel") || imageRef.includes("nintendo_feature") || imageRef.includes("playstation_feature")) {

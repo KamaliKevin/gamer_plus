@@ -72,15 +72,15 @@
 
                     <div class="col-md-3">
                         <div class="social_icon1">
-                            <a class="icons-sm fb-ic"><i class="fa fa-facebook"></i></a>
+                            <a href="https://www.facebook.com/" target="_blank" class="icons-sm fb-ic"><i class="fa fa-facebook"></i></a>
                             <!--Twitter-->
-                            <a class="icons-sm tw-ic"><i class="fa fa-twitter"></i></a>
+                            <a href="https://twitter.com/" target="_blank" class="icons-sm tw-ic"><i class="fa fa-twitter"></i></a>
                             <!--Google +-->
-                            <a class="icons-sm gplus-ic"><i class="fa fa-google-plus"> </i></a>
+                            <a href="https://plus.google.com/" target="_blank" class="icons-sm gplus-ic"><i class="fa fa-google-plus"></i></a>
                             <!--Linkedin-->
-                            <a class="icons-sm li-ic"><i class="fa fa-linkedin"> </i></a>
+                            <a href="https://www.linkedin.com/" target="_blank" class="icons-sm li-ic"><i class="fa fa-linkedin"></i></a>
                             <!--Pinterest-->
-                            <a class="icons-sm pin-ic"><i class="fa fa-pinterest"> </i></a>
+                            <a href="https://pinterest.com/" target="_blank" class="icons-sm pin-ic"><i class="fa fa-pinterest"></i></a>
                         </div> <!--social_icon1-->
                     </div><!--col-md-3-->
                 </div> <!--row-->
@@ -101,7 +101,7 @@
                     <ul class="nav navbar-nav">
                         <li class="hidden"><a href="#page-top"></a></li>
                         <% categories.forEach(category => { %>
-                            <li><a class="page-scroll" href="/category"><%= category.name %></a></li>
+                            <li><a class="page-scroll" href="/category/<%= category.name.toLowerCase() %>"><%= category.name %></a></li>
                         <% }); %>
 
                         <!--

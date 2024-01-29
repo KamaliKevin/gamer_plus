@@ -18,7 +18,7 @@
 												</div> <!--item_img-->
 												<div class="item_title_date">
 													<div class="news_item_title">
-														<h2><a href="#"><%= article.title %></a></h2>
+														<h2><a href="/single/<%= article.id %>"><%= article.title %></a></h2>
 													</div>
 													<div class="item_meta"><%= article.formatted_created_at %></div>
 												</div> <!--item_title_date-->
@@ -61,7 +61,7 @@
 													</div> <!--item_img-->
 													<div class="item_title_date">
 														<div class="news_item_title">
-															<h2><a href="/single"><%= article.title %></a></h2>
+															<h2><a href="/single/<%= article.id %>"><%= article.title %></a></h2>
 														</div>
 														<div class="item_meta"><%= article.formatted_created_at %></div>
 													</div><!--item_title_date-->
@@ -88,7 +88,9 @@
 		<div class="row">
 		   	<div class="col-md-9">
 		   		<div class="category_layout">
-			   		<div class="item_category blue"><h2><a href="/category"><%= playstationFeatureArticle.category_name %></a></h2></div>
+			   		<div class="item_category blue">
+						<h2><a href="/category/<%= playstationFeatureArticle.category_name.toLowerCase() %>"><%= playstationFeatureArticle.category_name %></a></h2>
+					</div>
 						<div class="row">
 				   			<div class="col-md-7">
 								<div class="item feature_news_item">
@@ -98,7 +100,7 @@
 										</div><!--item_img--> 
 										<div class="item_title_date">
 											<div class="news_item_title">
-												<h2><a href="#"><%= playstationFeatureArticle.title %></a></h2>
+												<h2><a href="/single/<%= playstationFeatureArticle.id %>"><%= playstationFeatureArticle.title %></a></h2>
 											</div><!--news_item_title-->
                                             <div class="item_meta"><%= playstationFeatureArticle.formatted_created_at %></div>
 										</div><!--item_title_date-->
@@ -117,7 +119,7 @@
 													<a href="#"><img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image"></a>
 												</div><!--media-left-->
 												<div class="media-body">
-													<h3 class="media-heading"><a href="#"><%= article.title %></a></h3>
+													<h3 class="media-heading"><a href="/single/<%= article.id %>"><%= article.title %></a></h3>
 
 													<p><%= article.subtitle %></p>
 
@@ -135,7 +137,9 @@
 				</div><!--category_layout-->
 
 		   		<div class="category_layout">
-		   			<div class="item_category red"><h2><a href="#"><%= nintendoFeatureArticle.category_name %></a></h2></div>
+		   			<div class="item_category red">
+						<h2><a href="/category/<%= nintendoFeatureArticle.category_name.toLowerCase() %>"><%= nintendoFeatureArticle.category_name %></a></h2>
+					</div>
 					<div class="row">
 						<div class="col-md-7">
 							<div class="item feature_news_item">
@@ -145,7 +149,7 @@
 									</div><!--item_img-->
 									<div class="item_title_date">
 										<div class="news_item_title">
-											<h2><a href="#"><%= nintendoFeatureArticle.title %></a></h2>
+											<h2><a href="/single/<%= nintendoFeatureArticle.id %>"><%= nintendoFeatureArticle.title %></a></h2>
 										</div><!--news_item_title-->
 										<div class="item_meta"><%= nintendoFeatureArticle.formatted_created_at %></div>
 									</div><!--item_title_date-->
@@ -164,7 +168,7 @@
 												<a href="#"><img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image"></a>
 											</div><!--media-left-->
 											<div class="media-body">
-												<h3 class="media-heading"><a href="#"><%= article.title %></a></h3>
+												<h3 class="media-heading"><a href="/single/<%= article.id %>"><%= article.title %></a></h3>
 
 												<p><%= article.subtitle %></p>
 
@@ -181,76 +185,7 @@
 		   		</div><!--category_layout-->
 		   	</div><!--col-md-9-->
 
-			<!-- Aside -->
-		   	<div class="col-md-3">
-
-				<div class="tab sitebar">
-					<ul class="nav nav-tabs">
-						<li class="active"><a href="#1" data-toggle="tab">Nuevo</a></li>
-						<li><a href="#2" data-toggle="tab">Popular</a></li>
-					</ul>
-
-					<div class="tab-content">
-						<div class="tab-pane active" id="1">
-							<% latestArticles.forEach(article => { %>
-								<div class="media">
-									<div class="media-left">
-										<a href="#"><img class="media-object" src="<%= article.image_src + '?width=80&height=80' %>" alt="Generic placeholder image"></a>
-									</div><!--media-left-->
-									<div class="media-body">
-										<h4 class="media-heading"><a href="#"><%= article.title %></a></h4>
-										<div class="item_meta"><%= article.formatted_created_at %></div>
-									</div><!--media-body-->
-								</div><!--media-->
-							<% }); %>
-						</div><!--tab-pane-->
-
-						<div class="tab-pane" id="2">
-							<div class="media">
-								<div class="media-left">
-									<a href="#"><img class="media-object" src="/img/img-list4.jpg" alt="Generic placeholder image"></a>
-								</div><!--media-left-->
-								<div class="media-body">
-									<h3 class="media-heading"><a href="#">Spain going to made class football</a></h3>
-									<span class="rating">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-half-full"></i>
-									</span>
-								</div><!--media-body-->
-							</div><!--media-->
-
-							<div class="media">
-								<div class="media-left">
-									<a href="#"><img class="media-object" src="/img/img-list.jpg" alt="Generic placeholder image"></a>
-								</div><!--media-left-->
-								<div class="media-body">
-									<h3 class="media-heading"><a href="#">Spain going to made class football</a></h3>
-									<span class="rating">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-half-full"></i>
-									</span>
-								</div><!--media-body-->
-							</div><!--media-->
-						</div><!--tab-pane-->
-					</div><!--tab-content-->
-				</div><!--tab-->
-
-				<% if(asideAds && asideAds.length > 0) { %>
-					<% asideAds.forEach(ad => { %>
-						<div class="ad">
-							<a href="#" target="_blank"><img class="img-responsive" src="<%= ad.image_src %>" alt="img" /></a>
-						</div>
-					<% }); %>
-				<% } else { %>
-					<p>No ad data</p>
-				<% } %>
-			</div>
+			<%- include('layouts/aside') %>
 		</div>
 	</div>
 	</section><!--feature_category_section-->
@@ -269,7 +204,7 @@
 								<div class="item">
 									<div class="video_thumb"><img src="<%= preview.image_src %>" alt="Owl Image"></div>
 									<div class="video_info">
-										<div class="video_item_title"><h3><a href="#"><%= preview.title %></a></h3></div><!--video_item_title-->
+										<div class="video_item_title"><h3><a href="/single/<%= preview.id %>"><%= preview.title %></a></h3></div><!--video_item_title-->
 										<div class="item_meta"><%= preview.formatted_created_at  %></div><!--item_meta-->
 									</div><!--video_info-->
 								</div>

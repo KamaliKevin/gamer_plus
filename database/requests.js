@@ -3,154 +3,398 @@ require('dotenv').config();
 const { statements } = require("./statements");
 const mysql = require("mysql2/promise");
 
-const dbConfig = {
+const pool = mysql.createPool(  {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-};
+});
+
+
+// VARIABLES:
+let dbConnection;
 
 
 // PETICIONES:
 /*
+* Consigue la información de un autor según el ID del artículo
+*/
+async function getAuthorByArticleId(articleId) {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.authorByArticleId, [articleId]);
+        console.log("Author by article ID request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/*
+* Consigue la información del editor
+*/
+async function getEditor() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.editor);
+        console.log("Editor request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/*
 * Consigue todos los adelantos de todos los videos
 */
-async function getAllVideoPreviews() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.videoPreviews);
-    console.log("All video previews request done");
-    return rows;
+async function getVideoPreviews() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.videoPreviews);
+        console.log("All video previews request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/*
+* Consigue la publicidad para un artículo
+*/
+async function getSingleAd() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.singleAd);
+        console.log("Single ad request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue toda la publicidad secundaria
 */
-async function getAllAsideAds() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.asideAds);
-    console.log("All aside ads request done");
-    return rows;
+async function getAsideAds() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.asideAds);
+        console.log("All aside ads request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue todas las categorías
 */
 async function getAllCategories() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.categories);
-    console.log("All categories request done");
-    return rows;
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.categories);
+        console.log("All categories request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/*
+* Consigue los artículos según la categoría
+*/
+async function getArticlesByCategory(categoryName) {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.articlesByCategory, [categoryName]);
+        console.log("Articles by category request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/*
+* Consigue el artículo destacado según la categoría
+*/
+async function getFeatureArticleByCategory(categoryName) {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.featureArticleByCategory, [categoryName]);
+        console.log("Feature article by category request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue todos los artículos más recientes
 */
-async function getAllLatestArticles() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.latestArticles);
-    console.log("All latest articles request done");
-    return rows;
+async function getLatestArticles() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.latestArticles);
+        console.log("All latest articles request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue todos los artículos Nintendo de lista
 */
-async function getAllNintendoListArticles() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.nintendoListArticles);
-    console.log("All Nintendo list articles request done");
-    return rows;
+async function getNintendoListArticles() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.nintendoListArticles);
+        console.log("All Nintendo list articles request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue el artículo Nintendo destacado
 */
 async function getNintendoFeatureArticle() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.nintendoFeatureArticle);
-    console.log("Nintendo feature article request done");
-    return rows[0];
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.nintendoFeatureArticle);
+        console.log("Nintendo feature article request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue todos los artículos PlayStation de lista
 */
-async function getAllPlaystationListArticles() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.playstationListArticles);
-    console.log("All PlayStation list articles request done");
-    return rows;
+async function getPlaystationListArticles() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.playstationListArticles);
+        console.log("All PlayStation list articles request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue el artículo PlayStation destacado
 */
 async function getPlaystationFeatureArticle() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.playstationFeatureArticle);
-    console.log("PlayStation feature article request done");
-    return rows[0];
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.playstationFeatureArticle);
+        console.log("PlayStation feature article request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue todos los artículos esports destacados
 */
-async function getAllEsportsFeatureArticles() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.esportsFeatureArticles);
-    console.log("Esports feature articles request done");
-    return rows;
+async function getEsportsFeatureArticles() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.esportsFeatureArticles);
+        console.log("All Esports feature articles request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue todos los artículos del carrusel
 */
-async function getAllCarouselArticles() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.carouselArticles);
-    console.log("All carousel articles request done");
-    return rows;
+async function getCarouselArticles() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.carouselArticles);
+        console.log("All carousel articles request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue todos los artículos
 */
 async function getAllArticles() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.articles);
-    console.log("All articles request done");
-    return rows;
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.articles);
+        console.log("All articles request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 
 /*
-* Consigue un artículo en específico
+* Consigue un artículo en específico mediante el ID
 */
 async function getArticleById(articleId) {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.articleById, [articleId]);
-    console.log("Article by ID request done");
-    return rows;
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.articleById, [articleId]);
+        console.log("Article by ID request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue la publicidad principal
 */
 async function getHeaderAd() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.headerAd);
-    console.log("Header ad request done");
-    return rows[0];
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.headerAd);
+        console.log("Header ad request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
 * Consigue el logo
 */
 async function getLogo() {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.logo);
-    console.log("Logo request done");
-    return rows[0];
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.logo);
+        console.log("Logo request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
@@ -158,12 +402,23 @@ async function getLogo() {
 */
 async function connectToDatabase() {
     try {
-        const connection = await mysql.createConnection(dbConfig);
-        console.log("Connected to the database. Running request...");
-        return connection;
+        return await pool.getConnection();
     }
     catch (error) {
         console.error("Error connecting to the database:", error);
+        throw error;
+    }
+}
+
+/*
+* Desconecta de la base de datos para no sobrecargar las llmadas a la base de datos
+*/
+async function releaseConnection(connection) {
+    try {
+        connection.release();
+    }
+    catch (error) {
+        console.error("Error releasing database connection: ", error);
         throw error;
     }
 }
@@ -176,13 +431,18 @@ module.exports = {
     getArticleById,
     getAllArticles,
     getAllCategories,
-    getAllCarouselArticles,
-    getAllEsportsFeatureArticles,
+    getCarouselArticles,
+    getEsportsFeatureArticles,
     getPlaystationFeatureArticle,
-    getAllPlaystationListArticles,
+    getPlaystationListArticles,
     getNintendoFeatureArticle,
-    getAllNintendoListArticles,
-    getAllLatestArticles,
-    getAllAsideAds,
-    getAllVideoPreviews
+    getNintendoListArticles,
+    getLatestArticles,
+    getAsideAds,
+    getSingleAd,
+    getVideoPreviews,
+    getEditor,
+    getAuthorByArticleId,
+    getFeatureArticleByCategory,
+    getArticlesByCategory
 };
