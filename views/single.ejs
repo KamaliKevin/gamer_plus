@@ -8,9 +8,15 @@
 				<div class="single_content_layout">
 					<% if(articleById) { %>
 						<div class="item feature_news_item">
-							<div class="item_img">
-								<img class="img-responsive" src="<%= articleById.image_src + '?width=800&height=500' %>" alt="Chania">
-							</div><!--item_img-->
+							<% if(articleById.media_external_ref && articleById.media_external_ref.includes("youtube")) { %>
+								<div class="video-container">
+									<iframe width="800" height="500" src="<%= articleById.media_external_ref %>" allowfullscreen></iframe>
+								</div>
+							<% } else { %>
+								<div class="item_img">
+									<img class="img-responsive" src="<%= articleById.media_src + '?width=800&height=500' %>" alt="Chania">
+								</div><!--item_img-->
+							<% } %>
 							<div class="item_wrapper">
 								<div class="news_item_title">
 									<h2><%= articleById.title %></h2>
@@ -31,6 +37,9 @@
 								<div class="item_content">
 									<%= articleById.content %>
 								</div><!--item_content-->
+								<p style="font-size: 16px">
+									<i class='fa fa-eye'></i> <%= views.views %> <%= Number(views.views) === 1 ? 'visita' : 'visitas' %>
+								</p>
 							</div><!--item_wrapper-->
 						</div><!--feature_news_item-->
 					<% } else { %>
@@ -38,53 +47,39 @@
 					<% } %>
 					
 					<div class="single_related_news">
-					 <div class="single_media_title"><h2>Related News</h2></div>
+					 <div class="single_media_title"><h2>Noticias relacionadas</h2></div>
 						<div class="media_wrapper">
-							<div class="media">
-								<div class="media-left">
-									<a href="#"><img class="media-object" src="/img/img-list5.jpg" alt="Generic placeholder image"></a>
-								</div><!--media-left-->
-								<div class="media-body">
-									<h4 class="media-heading"><a href="#">Machester United start the player
-									</a></h4>
-									<div class="media_meta"><a href="#">20Aug- 2015,</a> by:<a href="#">Jhonson</a></div>
-									<div class="media_content"><p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore</p>
-                                    </div><!--media_content-->
-								</div><!--media-body-->
-							</div><!--media-->
-
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="#"><img class="media-object" src="/img/img-list2.jpg" alt="Generic placeholder image"></a>
-                                </div><!--media-left-->
-                                <div class="media-body">
-                                    <h4 class="media-heading"><a href="#">Machester United start the player
-                                    </a></h4>
-									<div class="media_meta"><a href="#">20Aug- 2015,</a> by:<a href="#">Jhonson</a></div>
-                                    <div class="media_content"><p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore</p>
-                                    </div><!--media_content-->
-                                </div><!--media-body-->
-                            </div><!--media-->
-
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="#"><img class="media-object" src="/img/img-list3.jpg" alt="Generic placeholder image"></a>
-                                </div><!--media-left-->
-                                <div class="media-body">
-                                    <h4 class="media-heading"><a href="#">Machester United start the player
-                                    </a></h4>
-									<div class="media_meta"><a href="#">20Aug- 2015,</a> by:<a href="#">Jhonson</a></div>
-                                    <div class="media_content"><p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore</p>
-                                    </div><!--media_content-->
-                                </div><!--media-body-->
-                            </div><!--media-->
+							<% if(relatedArticles && relatedArticles.length > 0) { %>
+								<% relatedArticles.forEach(article => { %>
+									<div class="media">
+										<div class="media-left">
+											<a href="/single/<%= article.id %>">
+												<img class="media-object" src="<%= article.image_src + '?width=80&height=80' %>" alt="Generic placeholder image">
+											</a>
+										</div><!--media-left-->
+										<div class="media-body">
+											<h4 class="media-heading">
+												<a href="/single/<%= article.id %>"><%= article.title %></a>
+											</h4>
+											<div class="media_meta"><%= article.formatted_created_at %></div>
+											<div class="media_content">
+												<p><%= article.subtitle.shortBody(10) %></p>
+											</div><!--media_content-->
+										</div><!--media-body-->
+									</div><!--media-->
+								<% });%>
+							<% } else { %>
+								<p>No related articles data</p>
+							<% } %>
 						</div><!--media_wrapper-->
 					</div><!--single_related_news-->
 
 
 					<div class="ad">
 						<% if(singleAd) { %>
-							<a href="#" target="_blank"><img class="img-responsive" src="<%= singleAd.image_src  %>" alt="Chania"></a>
+							<a href="<%= singleAd.external_ref %>" target="_blank">
+								<img class="img-responsive" src="<%= singleAd.image_src  %>" alt="Chania">
+							</a>
 						<% } else { %>
 							<p>No single ad data</p>
 						<% } %>

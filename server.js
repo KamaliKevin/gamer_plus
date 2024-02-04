@@ -4,20 +4,23 @@ const { getLogo, getHeaderAd, getArticleById, getAllArticles, getAllCategories,
     getCarouselArticles, getEsportsFeatureArticles,
     getPlaystationFeatureArticle, getPlaystationListArticles,
     getNintendoFeatureArticle, getNintendoListArticles,
-    getLatestArticles, getAsideAds, getSingleAd, getVideoPreviews,
+    getLatestArticles, getPopularArticles, getRelatedArticles,
+    getAsideAds, getSingleAd, getVideoPreviews,
     getEditor, getAuthorByArticleId, getFeatureArticleByCategory,
-    getArticlesByCategory } = require("./database/requests");
+    getArticlesByCategory, checkRecentVisit,
+    recordArticleVisit, getViewsByArticle } = require("./database/requests");
 
 const cors = require("cors");
 const axios = require("axios");
 const ejs = require("ejs");
 const path = require("path");
 const sharp = require("sharp");
-require("./utils/functions");
-
+require("./public/js/utils/functions");
+const { DAY_OF_WEEK_TRANSLATIONS_ES } = require("./public/js/utils/constants");
 
 const app = express();
 
+app.locals.translations = DAY_OF_WEEK_TRANSLATIONS_ES;
 
 // MIDDLEWARE:
 app.use(cors()); // Habilitar CORS para todas las rutas
@@ -33,7 +36,7 @@ app.use(async (req, res, next) => {
         next();
     }
     catch (error) {
-        console.error("Error fetching external data:", error.message);
+        console.error("Error fetching external data and translations:", error.message);
         next(error);
     }
 });
@@ -62,6 +65,7 @@ app.get("/", async (req, res) => {
         const nintendoFeatureArticle = await getNintendoFeatureArticle();
         const nintendoListArticles = await getNintendoListArticles();
         const latestArticles = await getLatestArticles();
+        const popularArticles = await getPopularArticles();
         const categories = await getAllCategories();
         const asideAds = await getAsideAds();
         const videoPreviews = await getVideoPreviews();
@@ -70,7 +74,7 @@ app.get("/", async (req, res) => {
         // Devolver 'index' como vista con datos
         res.render("index", { externalData, logo, headerAd, articles, carouselArticles,
             esportsFeatureArticles, playstationFeatureArticle, playstationListArticles,
-            nintendoFeatureArticle, nintendoListArticles, latestArticles,
+            nintendoFeatureArticle, nintendoListArticles, latestArticles, popularArticles,
             asideAds, videoPreviews, categories, editor });
     }
     catch (error) {
@@ -90,13 +94,14 @@ app.get("/category/:categoryName", async (req, res) => {
        const featureArticleByCategory = await getFeatureArticleByCategory(categoryRef);
        const articlesByCategory = await getArticlesByCategory(categoryRef);
        const latestArticles = await getLatestArticles();
+       const popularArticles = await getPopularArticles();
        const categories = await getAllCategories();
        const asideAds = await getAsideAds();
        const editor = await getEditor();
 
        res.render("category", { externalData, logo, headerAd,
            featureArticleByCategory, articlesByCategory,
-           latestArticles, categories, asideAds, editor });
+           latestArticles, popularArticles, categories, asideAds, editor });
    }
    catch (error) {
        console.error("Error in the category route:", error);
@@ -107,22 +112,37 @@ app.get("/category/:categoryName", async (req, res) => {
 
 app.get("/single/:articleId", async (req, res) => {
     try {
-        const categoryRef = parseInt(req.params.articleId);
+        const articleRef = parseInt(req.params.articleId);
+        const visitorIp = req.ip;
+        const routeName = req.originalUrl;
         const externalData = req.externalData;
+
+
+        // Comprobación de reciente visita de la misma IP:
+        const recentVisit = await checkRecentVisit(visitorIp, articleRef);
+
+        if (!recentVisit) {
+            await recordArticleVisit(routeName, visitorIp, articleRef);
+        }
+
 
         const logo = await getLogo();
         const headerAd = await getHeaderAd();
-        const articleById = await getArticleById(categoryRef);
+        const articleById = await getArticleById(articleRef);
         const latestArticles = await getLatestArticles();
+        const popularArticles = await getPopularArticles();
+        const relatedArticles = await getRelatedArticles(articleById.category_name, articleRef);
         const categories = await getAllCategories();
         const asideAds = await getAsideAds();
         const singleAd = await getSingleAd();
         const editor = await getEditor();
-        const authorByArticleId = await getAuthorByArticleId(categoryRef);
+        const views = await getViewsByArticle(articleRef);
+        const authorByArticleId = await getAuthorByArticleId(articleRef);
 
         res.render("single", { externalData, logo, headerAd,
-            articleById, singleAd, latestArticles,
-            categories, asideAds, editor, authorByArticleId });
+            articleById, singleAd, latestArticles, popularArticles,
+            relatedArticles, categories, asideAds, editor, authorByArticleId,
+            views});
     }
     catch (error) {
         console.error("Error in the single route:", error);

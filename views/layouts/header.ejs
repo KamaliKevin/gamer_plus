@@ -41,7 +41,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="top_ber_left" id="currentTime">
-                            <%= `${externalData.day}/${externalData.month}/${externalData.year} | ${externalData.dayOfWeek}` %>
+                            <%= `${externalData.day}/${externalData.month}/${externalData.year} | ${locals.translations[externalData.dayOfWeek]}` %>
                         </div><!--top_ber_left-->
                     </div><!--col-md-6-->
                     <div class="col-md-6">
@@ -66,7 +66,9 @@
 
                     <div class="col-md-6">
                         <div class="header_ad_banner">
-                            <a href="#" target="_blank"><img class="img-responsive" src="<%= headerAd.image_src %>" alt=""></a>
+                            <a href="<%= headerAd.external_ref %>" target="_blank">
+                                <img class="img-responsive" src="<%= headerAd.image_src %>" alt="">
+                            </a>
                         </div>
                     </div><!--col-md-6-->
 
@@ -100,6 +102,7 @@
                 <div id="navbar" class="collapse navbar-collapse sidebar-offcanvas">
                     <ul class="nav navbar-nav">
                         <li class="hidden"><a href="#page-top"></a></li>
+                        <li><a class="page-scroll" href="/">Inicio</a></li>
                         <% categories.forEach(category => { %>
                             <li><a class="page-scroll" href="/category/<%= category.name.toLowerCase() %>"><%= category.name %></a></li>
                         <% }); %>

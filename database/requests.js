@@ -84,7 +84,7 @@ async function getSingleAd() {
         dbConnection = await connectToDatabase();
         const [rows, fields] = await dbConnection.execute(statements.singleAd);
         console.log("Single ad request done");
-        return rows;
+        return rows[0];
     }
     catch (error) {
         console.error("Error executing database query:", error);
@@ -165,6 +165,46 @@ async function getFeatureArticleByCategory(categoryName) {
         const [rows, fields] = await dbConnection.execute(statements.featureArticleByCategory, [categoryName]);
         console.log("Feature article by category request done");
         return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/*
+* Consigue todos los artículos relacionado a otro
+*/
+async function getRelatedArticles(categoryName, articleId) {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.relatedArticles, [categoryName, articleId]);
+        console.log("All related articles request done");
+        return rows;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/*
+* Consigue todos los artículos más populares
+*/
+async function getPopularArticles() {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.popularArticles);
+        console.log("All latest articles request done");
+        return rows;
     }
     catch (error) {
         console.error("Error executing database query:", error);
@@ -397,6 +437,54 @@ async function getLogo() {
     }
 }
 
+/**
+ * Consigue la cantidad de visitas de un artículo
+ */
+async function getViewsByArticle(articleId){
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.viewsByArticle, [articleId]);
+        console.log("Views request done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/**
+ * Graba una visita de un artículo
+ */
+async function recordArticleVisit(routeName, visitorIp, articleId) {
+    try {
+        dbConnection = await connectToDatabase();
+        await dbConnection.execute(statements.recordVisit, [routeName, visitorIp, articleId]);
+        console.log("Record visit request done");
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/**
+ * Comprueba si una IP visitó recientemente un artículo o no
+ */
+async function checkRecentVisit(visitorIp, articleId) {
+    const dbConnection = await connectToDatabase();
+    const [rows, fields] = await dbConnection.execute(statements.checkRecentVisit, [visitorIp, articleId]);
+    return rows.length > 0;
+}
+
 /*
 * Conecta a la base de datos
 */
@@ -438,11 +526,16 @@ module.exports = {
     getNintendoFeatureArticle,
     getNintendoListArticles,
     getLatestArticles,
+    getPopularArticles,
     getAsideAds,
     getSingleAd,
     getVideoPreviews,
     getEditor,
     getAuthorByArticleId,
     getFeatureArticleByCategory,
-    getArticlesByCategory
+    getArticlesByCategory,
+    checkRecentVisit,
+    recordArticleVisit,
+    getViewsByArticle,
+    getRelatedArticles
 };

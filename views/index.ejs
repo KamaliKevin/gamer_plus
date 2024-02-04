@@ -14,7 +14,9 @@
 										<div class="item <%= index === 0 ? 'active' : '' %> feature_news_item">
 											<div class="item_wrapper">
 												<div class="item_img">
-													<img class="img-responsive" src="<%= article.image_src %>" alt="Noticia carrusel">
+													<a href="/single/<%= article.id %>">
+														<img class="img-responsive" src="<%= article.image_src %>" alt="Noticia carrusel">
+													</a>
 												</div> <!--item_img-->
 												<div class="item_title_date">
 													<div class="news_item_title">
@@ -24,7 +26,7 @@
 												</div> <!--item_title_date-->
 											</div> <!--item_wrapper-->
 
-											<div class="item_content"><%= article.subtitle %></div>
+											<div class="item_content"><%= article.subtitle.shortBody(10) %></div>
 
 										</div><!--feature_news_item-->
 									<% }); %>
@@ -57,7 +59,9 @@
 											<div class="item active">
 												<div class="item_wrapper">
 													<div class="item_img">
-														<img class="img-responsive" src="<%= article.image_src %>" alt="Chania">
+														<a href="/single/<%= article.id %>">
+															<img class="img-responsive" src="<%= article.image_src %>" alt="Chania">
+														</a>
 													</div> <!--item_img-->
 													<div class="item_title_date">
 														<div class="news_item_title">
@@ -66,7 +70,7 @@
 														<div class="item_meta"><%= article.formatted_created_at %></div>
 													</div><!--item_title_date-->
 												</div> <!--item_wrapper-->
-												<div class="item_content"><%= article.subtitle %></div>
+												<div class="item_content"><%= article.subtitle.shortBody(5) %></div>
 
 											</div><!--item-->
 										</div><!--feature_news_item-->
@@ -89,14 +93,18 @@
 		   	<div class="col-md-9">
 		   		<div class="category_layout">
 			   		<div class="item_category blue">
-						<h2><a href="/category/<%= playstationFeatureArticle.category_name.toLowerCase() %>"><%= playstationFeatureArticle.category_name %></a></h2>
+						<h2>
+							<a href="/category/<%= playstationFeatureArticle.category_name.toLowerCase() %>"><%= playstationFeatureArticle.category_name %></a>
+						</h2>
 					</div>
 						<div class="row">
 				   			<div class="col-md-7">
 								<div class="item feature_news_item">
 									<div class="item_wrapper">
 										<div class="item_img">
-											<img class="img-responsive" src="<%= playstationFeatureArticle.image_src %>" alt="Chania">
+											<a href="/single/<%= playstationFeatureArticle.id %>">
+												<img class="img-responsive" src="<%= playstationFeatureArticle.image_src %>" alt="Chania">
+											</a>
 										</div><!--item_img--> 
 										<div class="item_title_date">
 											<div class="news_item_title">
@@ -105,7 +113,7 @@
                                             <div class="item_meta"><%= playstationFeatureArticle.formatted_created_at %></div>
 										</div><!--item_title_date-->
 									</div><!--item_wrapper-->	
-								    <div class="item_content"><%= playstationFeatureArticle.subtitle %></div><!--item_content-->
+								    <div class="item_content"><%= playstationFeatureArticle.subtitle.shortBody(10) %></div><!--item_content-->
 
 								</div><!--feature_news_item-->
 				   			</div><!--col-md-7-->
@@ -116,12 +124,14 @@
 										<% playstationListArticles.forEach(article => { %>
 											<div class="media">
 												<div class="media-left">
-													<a href="#"><img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image"></a>
+													<a href="/single/<%= article.id %>">
+														<img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image">
+													</a>
 												</div><!--media-left-->
 												<div class="media-body">
 													<h3 class="media-heading"><a href="/single/<%= article.id %>"><%= article.title %></a></h3>
 
-													<p><%= article.subtitle %></p>
+													<p><%= article.subtitle.shortBody(10) %></p>
 
 												</div><!--media-body-->
 											</div><!--media-->
@@ -138,23 +148,29 @@
 
 		   		<div class="category_layout">
 		   			<div class="item_category red">
-						<h2><a href="/category/<%= nintendoFeatureArticle.category_name.toLowerCase() %>"><%= nintendoFeatureArticle.category_name %></a></h2>
+						<h2>
+							<a href="/category/<%= nintendoFeatureArticle.category_name.toLowerCase() %>"><%= nintendoFeatureArticle.category_name %></a>
+						</h2>
 					</div>
 					<div class="row">
 						<div class="col-md-7">
 							<div class="item feature_news_item">
 								<div class="item_wrapper">
 									<div class="item_img">
-										<img class="img-responsive" src="<%= nintendoFeatureArticle.image_src %>" alt="Chania">
+										<a href="/single/<%= nintendoFeatureArticle.id %>">
+											<img class="img-responsive" src="<%= nintendoFeatureArticle.image_src %>" alt="Chania">
+										</a>
 									</div><!--item_img-->
 									<div class="item_title_date">
 										<div class="news_item_title">
-											<h2><a href="/single/<%= nintendoFeatureArticle.id %>"><%= nintendoFeatureArticle.title %></a></h2>
+											<h2>
+												<a href="/single/<%= nintendoFeatureArticle.id %>"><%= nintendoFeatureArticle.title %></a>
+											</h2>
 										</div><!--news_item_title-->
 										<div class="item_meta"><%= nintendoFeatureArticle.formatted_created_at %></div>
 									</div><!--item_title_date-->
 								</div><!--item_wrapper-->
-								<div class="item_content"><%= nintendoFeatureArticle.subtitle %></div><!--item_content-->
+								<div class="item_content"><%= nintendoFeatureArticle.subtitle.shortBody(10) %></div><!--item_content-->
 
 							</div><!--feature_news_item-->
 						</div><!--col-md-7-->
@@ -165,12 +181,16 @@
 									<% nintendoListArticles.forEach(article => { %>
 										<div class="media">
 											<div class="media-left">
-												<a href="#"><img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image"></a>
+												<a href="/single/<%= article.id %>">
+													<img class="media-object" src="<%= article.image_src %>" alt="Generic placeholder image">
+												</a>
 											</div><!--media-left-->
 											<div class="media-body">
-												<h3 class="media-heading"><a href="/single/<%= article.id %>"><%= article.title %></a></h3>
+												<h3 class="media-heading">
+													<a href="/single/<%= article.id %>"><%= article.title %></a>
+												</h3>
 
-												<p><%= article.subtitle %></p>
+												<p><%= article.subtitle.shortBody(10) %></p>
 
 											</div><!--media-body-->
 										</div><!--media-->
@@ -202,9 +222,15 @@
 						<% if(videoPreviews && videoPreviews.length > 0) { %>
 							<% videoPreviews.forEach(preview => { %>
 								<div class="item">
-									<div class="video_thumb"><img src="<%= preview.image_src %>" alt="Owl Image"></div>
+									<div class="video_thumb">
+										<a href="/single/<%= preview.id %>">
+											<img src="<%= preview.image_src %>" alt="Owl Image">
+										</a>
+									</div>
 									<div class="video_info">
-										<div class="video_item_title"><h3><a href="/single/<%= preview.id %>"><%= preview.title %></a></h3></div><!--video_item_title-->
+										<div class="video_item_title">
+											<h3><a href="/single/<%= preview.id %>"><%= preview.title %></a></h3>
+										</div><!--video_item_title-->
 										<div class="item_meta"><%= preview.formatted_created_at  %></div><!--item_meta-->
 									</div><!--video_info-->
 								</div>
