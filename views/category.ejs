@@ -1,11 +1,14 @@
-<%- include('layouts/header', { title: 'Gamer Plus - Category'}) %>
+<%- include('layouts/header', { title: 'Gamer Plus - Categoría'}) %>
 
 <!-- Feature Category Section & sidebar -->
 <section id="feature_category_section" class="feature_category_section category_page section_wrapper">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-9">
-				<!-- Feature article -->
+				<div>
+					<p class="category_title"><%= categoryRef %></p>
+				</div>
+				<!-- Artículo principal -->
 				<% if(featureArticleByCategory) { %>
 				<div class="row">
 					<div class="col-md-12">
@@ -13,7 +16,9 @@
 							<div class="item">
 								<div class="item_wrapper">
 									<div class="item_img">
-										<img class="img-responsive" src="<%= featureArticleByCategory.image_src + '?width=1200&height=900' %>" alt="Chania">
+										<a href="/single/<%= featureArticleByCategory.id %>">
+											<img class="img-responsive" src="<%= featureArticleByCategory.image_src + '?width=1200&height=900' %>" alt="Chania">
+										</a>
 									</div><!--item_img-->
 									<div class="item_title_date">
 										<div class="news_item_title">
@@ -32,7 +37,7 @@
 						<p>No feature article by category data</p>
 					<% } %>
 
-					<!-- Side articles -->
+					<!-- Artículos secundarios -->
 					<div class="row">
 						<% if(articlesByCategory && articlesByCategory.length > 0) { %>
 							<% articlesByCategory.forEach(article => { %>
@@ -41,7 +46,9 @@
 										<div class="item">
 											<div class="item_wrapper">
 												<div class="item_img">
-													<img class="img-responsive" src="<%= article.image_src + '?width=800&height=600' %>" alt="Chania">
+													<a href="/single/<%= article.id %>">
+														<img class="img-responsive" src="<%= article.image_src + '?width=800&height=600' %>" alt="Chania">
+													</a>
 												</div> <!--item_img-->
 												<div class="item_title_date">
 													<div class="news_item_title">
@@ -50,14 +57,14 @@
 													<div class="item_meta"><%= article.formatted_created_at %></div>
 												</div><!--item_title_date-->
 											</div> <!--item_wrapper-->
-											<div class="item_content"><%= article.subtitle %></div>
+											<div class="item_content"><%= article.subtitle.shortBody(10) %></div>
 
 										</div><!--item-->
 									</div><!--feature_news_item-->
 								</div><!--col-md-6-->
 							<% }); %>
 						<% } else { %>
-							<p>No feature article by category data</p>
+							<p>No side articles by category data</p>
 						<% } %>
 
 					</div><!--row-->

@@ -99,7 +99,7 @@ app.get("/category/:categoryName", async (req, res) => {
        const asideAds = await getAsideAds();
        const editor = await getEditor();
 
-       res.render("category", { externalData, logo, headerAd,
+       res.render("category", { externalData, categoryRef, logo, headerAd,
            featureArticleByCategory, articlesByCategory,
            latestArticles, popularArticles, categories, asideAds, editor });
    }
@@ -146,6 +146,40 @@ app.get("/single/:articleId", async (req, res) => {
     }
     catch (error) {
         console.error("Error in the single route:", error);
+        res.status(500).send("Internal server error");
+    }
+});
+
+app.get("/privacy", async (req, res) => {
+    try {
+        const externalData = req.externalData;
+
+        const logo = await getLogo();
+        const headerAd = await getHeaderAd();
+        const categories = await getAllCategories();
+        const editor = await getEditor();
+
+        res.render("privacy", {externalData, logo, headerAd, editor, categories});
+    }
+    catch (error) {
+        console.error("Error serving the privacy route:", error);
+        res.status(500).send("Internal server error");
+    }
+});
+
+app.get("/contact", async (req, res) => {
+    try {
+        const externalData = req.externalData;
+
+        const logo = await getLogo();
+        const headerAd = await getHeaderAd();
+        const categories = await getAllCategories();
+        const editor = await getEditor();
+
+        res.render("contact", {externalData, logo, headerAd, editor, categories});
+    }
+    catch (error) {
+        console.error("Error serving the privacy route:", error);
         res.status(500).send("Internal server error");
     }
 });
