@@ -14,13 +14,14 @@ const cors = require("cors");
 const axios = require("axios");
 const ejs = require("ejs");
 const path = require("path");
-const sharp = require("sharp");
+const bodyParser = require('body-parser');
+const nodemailer = require("nodemailer"); // Librería para controlar el email Nodemailer
+const sharp = require("sharp"); // Librería para manipular imágenes Sharp
 require("./public/js/utils/functions");
 const { DAY_OF_WEEK_TRANSLATIONS_ES } = require("./public/js/utils/constants");
 
 const app = express();
 
-app.locals.translations = DAY_OF_WEEK_TRANSLATIONS_ES;
 
 // MIDDLEWARE:
 app.use(cors()); // Habilitar CORS para todas las rutas
@@ -40,11 +41,21 @@ app.use(async (req, res, next) => {
         next(error);
     }
 });
+app.use(bodyParser.urlencoded({ extended: true })); // Habilita poder enviar datos de formulario
 
 
 // CONFIGURACIÓN:
 app.set("view engine", "ejs"); // Usar EJS (Embedded JavaScript) como motor de plantillas
-
+const transport = nodemailer.createTransport({
+    // Configuración de correo electrónico
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+    }
+});
+app.locals.translations = DAY_OF_WEEK_TRANSLATIONS_ES; // Traducción de los días de la semana de la API de Time API
 
 
 // RUTAS:
@@ -182,6 +193,73 @@ app.get("/contact", async (req, res) => {
         console.error("Error serving the privacy route:", error);
         res.status(500).send("Internal server error");
     }
+});
+
+app.post("/contact", async (req, res) => {
+    // Datos persistentes
+    const externalData = req.externalData;
+
+    const logo = await getLogo();
+    const headerAd = await getHeaderAd();
+    const categories = await getAllCategories();
+    const editor = await getEditor();
+
+    // Lógica nueva
+    const { name, email, comments } = req.body;
+    const mailOptions = {
+        from: email,
+        to: "soporte@example.com",
+        subject: `Mensaje de ${name}`,
+        text: `Nombre: ${name}\n\nComentarios:\n${comments}`
+    };
+    let messageIsSent = false;
+    let result = "";
+
+
+    // Validación en el servidor
+    let errors = [];
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name || !email || !comments) {
+        errors.push("Todos los campos son obligatorios");
+    }
+
+    if(!emailPattern.test(email)){
+        errors.push("El correo electrónico no tiene un formato válido");
+    }
+
+
+    // Determinar resultado final
+    if (errors.length === 0) {
+        try {
+            // Enviar mensaje del usuario si no hubo errores
+            await new Promise((resolve, reject) => {
+                transport.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        messageIsSent = false;
+                        result = `Hubo un error enviando el mensaje: ${error}. Puedes intentarlo más tarde`;
+                        reject(error);
+                    }
+                    else {
+                        messageIsSent = true;
+                        result = `Los datos del formulario han sido enviados con éxito. Recibirá una respuesta en ${email} en un máximo de unos días`;
+                        resolve(info);
+                    }
+                });
+            });
+
+            res.render("contact", { externalData, logo, headerAd, categories, editor, messageIsSent, result });
+        }
+        catch (error) {
+            console.error("Error enviado el mensaje:", error);
+        }
+    }
+    else {
+        messageIsSent = false;
+        result = "Hubo errores a la hora de enviar la información: ";
+        res.render("contact", { externalData, logo, headerAd, categories, editor, messageIsSent, result, errors });
+    }
+
 });
 
 

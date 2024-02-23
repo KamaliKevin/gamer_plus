@@ -3,28 +3,43 @@
 <div class="container">
     <p class="contact_title">Contacto</p>
     <main>
-        <form>
+        <% if(typeof messageIsSent !== 'undefined' && typeof result !== 'undefined') { %>
+            <% console.log(messageIsSent); %>
+            <div class="alert alert-<%- messageIsSent ? 'success' : 'danger' %> alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h6><%- result %></h6>
+                <% if(typeof errors !== 'undefined') { %>
+                    <% errors.forEach(error => { %>
+                        <p><%- error %></p>
+                    <% }) %>
+                <% } %>
+            </div>
+        <% } %>
+
+        <form method="post" class="mt-5">
             <div class="contact_input_container">
                 <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control contact_input" id="name" placeholder="Pon tu nombre aquí">
+                <input type="text" class="form-control contact_input" id="name" name="name" placeholder="Pon tu nombre aquí">
                 <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
             </div>
             <div class="contact_input_container">
                 <label for="email" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control contact_input" id="email" placeholder="Pon tu correo electrónico aquí">
+                <input type="email" class="form-control contact_input" id="email" name="email" placeholder="Pon tu correo electrónico aquí">
             </div>
             <div class="contact_input_container">
                 <label for="comments">Comentarios</label>
-                <textarea class="form-control contact_input_textarea" id="comments"
+                <textarea class="form-control contact_input_textarea" id="comments" name="comments"
                           rows="3" placeholder="Dinos aquí que quieres sugerir, preguntar o resolver"></textarea>
             </div>
-            <button type="button" class="btn btn-primary contact_button">Enviar</button>
+            <button type="submit" class="btn btn-primary contact_button">Enviar</button>
         </form>
 
         <article class="contact_article">
             <p>Si el formulario de contacto no funciona, puedes probar los siguientes medios: </p>
             <ul>
-                <li><b>Escríbenos a nuestro correo electrónico:</b> <a href="mailto:soporte@example.com">soporte@gamerplus.com</a></li>
+                <li><b>Escríbenos a nuestro correo electrónico:</b> <a href="mailto:soporte@example.com">soporte@example.com</a></li>
                 <li><b>Llámanos:</b> 928117XXX</li>
                 <li><b>Nuestra oficina abierta al público:</b> Calle Mármoles, XX, XX (Málaga, España)</li>
             </ul>
