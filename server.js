@@ -8,23 +8,39 @@ const { getLogo, getHeaderAd, getArticleById, getAllArticles, getAllCategories,
     getAsideAds, getSingleAd, getVideoPreviews,
     getEditor, getAuthorByArticleId, getFeatureArticleByCategory,
     getArticlesByCategory, checkRecentVisit,
-    recordArticleVisit, getViewsByArticle } = require("./database/requests");
+    recordArticleVisit, getViewsByArticle, checkAuthorLogin,
+    getAuthorProfile } = require("./database/requests");
 
 const cors = require("cors");
 const axios = require("axios");
 const ejs = require("ejs");
+const session = require('express-session');
 const path = require("path");
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer"); // Librería para controlar el email Nodemailer
 const sharp = require("sharp"); // Librería para manipular imágenes Sharp
-require("./public/js/utils/functions");
 const { DAY_OF_WEEK_TRANSLATIONS_ES } = require("./public/js/utils/constants");
+const { generateRandomString } = require("./public/js/utils/functions");
 
 const app = express();
 
 
 // MIDDLEWARE:
 app.use(cors()); // Habilitar CORS para todas las rutas
+
+app.use(session({ // Inicio de sesión
+    secret: generateRandomString(32),
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use((req, res, next) => {
+    // Variables de sesión
+    res.locals.username = req.session.username;
+    next();
+});
+
 app.use(express.static(path.join(__dirname, "public"))); // Hacer que el directorio 'public' sea el directorio estático
 app.use(async (req, res, next) => {
     // Extraer datos de API para cada ruta
@@ -93,7 +109,6 @@ app.get("/", async (req, res) => {
         res.status(500).send("Internal server error");
     }
 });
-
 
 app.get("/category/:categoryName", async (req, res) => {
    try {
@@ -260,6 +275,68 @@ app.post("/contact", async (req, res) => {
         res.render("contact", { externalData, logo, headerAd, categories, editor, messageIsSent, result, errors });
     }
 
+});
+
+app.get("/author/login", async (req, res) => {
+    res.render("author/login");
+});
+
+app.post("/author/login", async (req, res) => {
+    const { username, password } = req.body;
+    const authorLogin = await checkAuthorLogin(username);
+
+    // Validación en el servidor
+    let result = "";
+    let errors = [];
+
+    if (!username || !password) {
+        errors.push("Todos los campos son obligatorios");
+    }
+
+    if (!authorLogin) {
+        errors.push("El nombre de usuario no se encuentra en nuestra base de datos");
+    }
+    else {
+        const passwordsMatch = await bcrypt.compare(password, authorLogin.password);
+        if (!passwordsMatch) {
+            errors.push("La contraseña no es correcta");
+        }
+    }
+
+
+    // Determinar resultado final
+    if (errors.length === 0) {
+        // Opciones de sesión
+        req.session.username = username;
+
+        console.log("Current username: " + req.session.username);
+        res.redirect("/author/dashboard");
+    }
+    else {
+        result = "Hubo errores a la hora de enviar la información: ";
+        res.render("author/login", { result, errors });
+    }
+});
+
+app.get("/author/dashboard", async (req, res) => {
+    res.render("author/dashboard");
+});
+
+app.get("/author/dashboard/profile", async (req, res) => {
+    const authorProfile = await getAuthorProfile(req.session.username);
+    res.render("author/dashboard-profile", { authorProfile });
+});
+
+app.get("/author/logout", async (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session: ", err);
+            res.status(500).send("Error logging out");
+        }
+        else {
+            res.redirect("/author/login");
+        }
+    });
 });
 
 

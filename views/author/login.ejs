@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gamer Plus - Empleados</title>
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Oswald:400,700|Roboto:400,500" rel="stylesheet">
+
+        <!-- Bootstrap -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Font Awesome -->
+        <link href="/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+        <!-- Animate CSS -->
+        <link href="/css/animate.min.css" rel="stylesheet">
+
+        <!--Theme CSS -->
+        <link href="/css/style.css" rel="stylesheet">
+
+        <!-- Author CSS -->
+        <link href="/css/author.style.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="login-container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="d-flex justify-content-center">
+                        <img src="/img/logo.png" alt="Logo" class="img-responsive"/>
+                    </div>
+                    <h3 class="text-center">Acceso para empleados</h3>
+                </div>
+                <div class="panel-body">
+                    <% if(typeof result !== 'undefined') { %>
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h6><%- result %></h6>
+                            <% if(typeof errors !== 'undefined') { %>
+                                <% errors.forEach(error => { %>
+                                    <p><%- error %></p>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    <% } %>
+
+                    <form method="POST">
+                        <div class="form-group mt-md">
+                            <label for="username">Nombre de usuario:</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   placeholder="Introduce tu nombre de usuario">
+                        </div>
+                        <div class="form-group mt-md">
+                            <label for="password">Contraseña:</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Introduce tu contraseña">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-md">Iniciar sesión</button>
+                    </form>
+                </div>
+                <div class="panel-footer">
+                    <p class="text-primary fw-bold">
+                        Vuelva a la página principal en <a href="/">este enlace</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="/js/jquery.min.js"></script>
+
+        <!-- Owl carousel -->
+        <script src="/js/owl.carousel.js"></script>
+
+        <!-- Bootstrap -->
+        <script src="/js/bootstrap.min.js"></script>
+
+        <!-- Theme Script File-->
+        <script src="/js/script.js"></script>
+
+        <!-- Off Canvas Menu -->
+        <script src="/js/offcanvas.min.js"></script>
+
+        <!-- Utils files -->
+        <script src="/js/utils/functions.js"></script>
+        <script src="/js/utils/constants.js"></script>
+    </body>
+</html>

@@ -22,7 +22,9 @@ const statements = {
     videoPreviews: "SELECT article.id, article.title, DATE_FORMAT(article.created_at, '%d/%m/%Y %H:%i') AS formatted_created_at, media.src AS image_src FROM article JOIN media ON article.media_id = media.id WHERE media.src LIKE '%video-thumbnail%' ORDER BY article.created_at DESC, article.id DESC LIMIT 6",
     categories: "SELECT * FROM category",
     editor: "SELECT author.first_name, author.last_name, specialty.name AS specialty_name, author.introduction, media.src AS image_src FROM author JOIN specialty ON author.specialty_id = specialty.id JOIN media ON author.media_id = media.id WHERE media.src LIKE '%author%' ORDER BY author.id DESC LIMIT 1",
-    authorByArticleId: "SELECT author.first_name, author.last_name, specialty.name AS specialty_name, author.introduction, media.src AS image_src FROM author JOIN specialty ON author.specialty_id = specialty.id JOIN media ON author.media_id = media.id JOIN article ON author.id = article.author_id WHERE article.id = ?"
+    authorByArticleId: "SELECT author.first_name, author.last_name, specialty.name AS specialty_name, author.introduction, media.src AS image_src FROM author JOIN specialty ON author.specialty_id = specialty.id JOIN media ON author.media_id = media.id JOIN article ON author.id = article.author_id WHERE article.id = ?",
+    authorLogin: "SELECT username, password FROM author WHERE username = ?",
+    authorProfile: "SELECT username, first_name, last_name, role, specialty_id, introduction, media_id FROM author WHERE username = ?"
 }
 
 module.exports = {statements};

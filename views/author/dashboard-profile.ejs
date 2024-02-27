@@ -1,0 +1,58 @@
+<%- include('../layouts/dashboard-header') %>
+
+        <div class="dashboard-container">
+            <div class="panel panel-default dashboard-profile-container">
+                <div class="panel-heading">
+                    <div class="d-flex justify-content-center">
+                        <img src="/img/logo.png" alt="Logo" class="img-responsive"/>
+                    </div>
+                    <h2>Tus opciones de perfil, <%- typeof username !== 'undefined' ? username : 'desconocido...'%></h2>
+                </div>
+                <div class="panel-body">
+                    <% if(typeof authorProfile !== 'undefined') { %>
+                        <form>
+                            <div class="form-group">
+                                <label for="username">Nombre de usuario</label>
+                                <input type="text" class="form-control" id="username" name="username"
+                                       placeholder="Nombre de usuario" value="<%- authorProfile.username %>" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="first_name">Nombre</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name"
+                                       placeholder="Nombre" value="<%- authorProfile.first_name %>" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="last_name">Apellidos</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name"
+                                       placeholder="Apellidos" value="<%- authorProfile.last_name %>" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="role">Rol</label>
+                                <input type="text" class="form-control" id="role" name="role"
+                                       placeholder="Rol" value="<%- authorProfile.role %>" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="introduction">Introducción</label>
+                                <textarea class="form-control"
+                                          id="introduction" name="introduction"
+                                          rows="15" disabled><%- authorProfile.introduction %></textarea>
+                            </div>
+                            <button type="button" class="btn btn-block btn-warning" disabled>Editar información</button>
+                        </form>
+                    <% } else { %>
+                        <p class="text-danger">No se pudieron establecer los datos del perfil</p>
+                    <% } %>
+                </div>
+                <div class="panel-footer">
+                    <a href="/author/logout">
+                        <button class="btn btn-block btn-primary">Cerrar sesión</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+<%- include('../layouts/dashboard-footer') %>

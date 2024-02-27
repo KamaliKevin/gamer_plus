@@ -21,3 +21,23 @@ String.prototype.shortBody = function (maxLength) {
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
+
+/**
+ * Genera una cadena de texto aleatoria de caracteres alfanuméricos
+ * @param {number} length Longitud de la cadena de texto
+ * @return La cadena de texto aleatoria
+*/
+function generateRandomString(length) {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return result;
+}
+
+module.exports = {
+    generateRandomString
+}

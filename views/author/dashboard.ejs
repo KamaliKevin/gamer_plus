@@ -1,0 +1,29 @@
+<%- include('../layouts/dashboard-header') %>
+
+        <div class="dashboard-container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="d-flex justify-content-center">
+                        <img src="/img/logo.png" alt="Logo" class="img-responsive"/>
+                    </div>
+                    <h2>Bienvenido al menú, <%- typeof username !== 'undefined' ? username : 'desconocido...'%></h2>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item dashboard-option">
+                            <a href="/author/dashboard/profile" class="dashboard-option-link">Perfil</a>
+                        </li>
+                        <li class="list-group-item dashboard-option">
+                            <a href="/author/dashboard/posts" class="dashboard-option-link">Publicaciones</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <a href="/author/logout">
+                        <button class="btn btn-block btn-primary">Cerrar sesión</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+<%- include('../layouts/dashboard-footer') %>

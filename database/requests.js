@@ -480,9 +480,60 @@ async function recordArticleVisit(routeName, visitorIp, articleId) {
  * Comprueba si una IP visitó recientemente un artículo o no
  */
 async function checkRecentVisit(visitorIp, articleId) {
-    const dbConnection = await connectToDatabase();
-    const [rows, fields] = await dbConnection.execute(statements.checkRecentVisit, [visitorIp, articleId]);
-    return rows.length > 0;
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.checkRecentVisit, [visitorIp, articleId]);
+        console.log("Record visit request done");
+        return rows.length > 0;
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/**
+ * Consigue la información de perfil de un autor
+ */
+async function getAuthorProfile(username) {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.authorProfile, [username]);
+        console.log("Author profile details retrieved");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
+}
+
+/**
+ * Comprueba la información de sesión de inicio de un autor
+ */
+async function checkAuthorLogin(username) {
+    try {
+        dbConnection = await connectToDatabase();
+        const [rows, fields] = await dbConnection.execute(statements.authorLogin, [username]);
+        console.log("Author login check done");
+        return rows[0];
+    }
+    catch (error) {
+        console.error("Error executing database query:", error);
+    }
+    finally {
+        if (dbConnection) {
+            await releaseConnection(dbConnection);
+        }
+    }
 }
 
 /*
@@ -537,5 +588,7 @@ module.exports = {
     checkRecentVisit,
     recordArticleVisit,
     getViewsByArticle,
-    getRelatedArticles
+    getRelatedArticles,
+    checkAuthorLogin,
+    getAuthorProfile
 };
